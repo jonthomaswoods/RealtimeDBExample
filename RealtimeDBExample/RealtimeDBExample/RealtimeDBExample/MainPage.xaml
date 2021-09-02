@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:m="clr-namespace:RealtimeDBExample.Models"
+             xmlns:vm="clr-namespace:RealtimeDBExample.ViewModels" x:DataType="vm:MainPageViewModel"
+             x:Class="RealtimeDBExample.MainPage">
+
+    <ContentPage.BindingContext>
+        <vm:MainPageViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
+                
+                <!--Enter a new Description-->
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Entry Text="{Binding InputDescription}"  Placeholder="Enter Description" MaxLength="15" Grid.Row="0"/>
+                    <Button Text="Post" Command="{Binding PostCommand}"  Grid.Row="1" />
+                </Grid>
+
+                <!--List of Descriptions from Firebase-->
+                <ListView ItemsSource="{Binding Items,Mode=TwoWay}" RowHeight="100" SelectedItem="{Binding SelectedKey,Mode=TwoWay}" IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshListCommand}" IsRefreshing="{Binding IsRefreshing}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="m:ItemsModel">
+                            <ViewCell>
+                                <StackLayout>
+                                    <Grid Margin="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Entry Text="{Binding Description}" MaxLength="15" TextColor="Black" FontSize="Medium" Grid.Row="0" Grid.Column="0"/>
+                                        <Label Text="{Binding Date}" FontSize="Medium" Grid.Row="0" Grid.Column="1"/>
+                                        <Button Text="Delete"
+                                                Command="{Binding DeleteCommand, Mode=TwoWay,Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}}"
+                                                Grid.Row="1"
+                                                Grid.Column="0"/>
+                                        <Button Text="Update" Command="{Binding UpdateCommand, Mode=TwoWay,Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}}"
+                                                Grid.Row="1"
+                                                Grid.Column="1"/>
+                                    </Grid>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+    
+
+</ContentPage>
